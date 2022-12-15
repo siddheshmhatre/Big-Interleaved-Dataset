@@ -164,7 +164,7 @@ def get_filtered_ngrams(text, ngram_range, lang, filter_by_lang=False, perplexit
         for candidate in filtered_candidates:
             perplexity_filtered_candidates.append((candidate, perplexity_lm.get_perplexity(candidate, lang)))
 
-        top_n_candidates = heapq.nlargest(10, perplexity_filtered_candidates, key=lambda x : -x[1])
+        top_n_candidates = heapq.nlargest(20, perplexity_filtered_candidates, key=lambda x : -x[1])
 
         return [candidate[0] for candidate in top_n_candidates]
 
