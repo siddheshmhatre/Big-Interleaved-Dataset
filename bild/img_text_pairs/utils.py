@@ -42,7 +42,7 @@ def get_stats_table(raw_counts : dict, stats_table_cols : list):
 
     stats_table = wandb.Table(columns=stats_table_cols, data=stats_table_data)
 
-    return stats_table_data
+    return stats_table
 
 class LM:
     def __init__(self, tokenizer, lm):
