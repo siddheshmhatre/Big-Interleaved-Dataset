@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --partition=g80n54
+#SBATCH --partition=g80n60
 #SBATCH --nodes 1
 #SBATCH --gpus 8
 #SBATCH --comment laion

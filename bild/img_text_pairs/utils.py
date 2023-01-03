@@ -132,31 +132,33 @@ def get_filtered_ngrams(text, ngram_range, lang, filter_by_lang=False, perplexit
     filtered_candidates = []
     for i in range(len(candidates)):
         for n in range(*ngram_range):
-            for item in ngrams(candidates[i].split(), n):
-                item = " ".join(item)
+            sent_ngrams = [" ".join(ngram) for ngram in ngrams(candidates[i].split(), n)]
+            filtered_candidates.extend(list(sent_ngrams))
+            #for item in ngrams(candidates[i].split(), n):
+            #    item = " ".join(item)
 
-                if lang == 'en':
-                    word_tokens = word_tokenize(item)	
-                    adj_present = False
-                    verb_or_noun_present = False
+            #    if lang == 'en':
+            #        word_tokens = word_tokenize(item)	
+            #        adj_present = False
+            #        verb_or_noun_present = False
 
-                    for word in word_tokens:
-                        wordtype = set()
-                        for tmp in wn.synsets(word):
-                            if tmp.name().split('.')[0] == word:
-                                wordtype.add(tmp.pos())
+            #        for word in word_tokens:
+            #            wordtype = set()
+            #            for tmp in wn.synsets(word):
+            #                if tmp.name().split('.')[0] == word:
+            #                    wordtype.add(tmp.pos())
 
-                        if ('a' in wordtype or 's' in wordtype):
-                            adj_present = True
+            #            if ('a' in wordtype or 's' in wordtype):
+            #                adj_present = True
 
-                        if ('n' in wordtype or 'v' in wordtype):
-                            verb_or_noun_present = True
+            #            if ('n' in wordtype or 'v' in wordtype):
+            #                verb_or_noun_present = True
 
-                        if adj_present and verb_or_noun_present:
-                            filtered_candidates.append(item)
-                            break
-                else:
-                    filtered_candidates.append(item)
+            #            if adj_present and verb_or_noun_present:
+            #                filtered_candidates.append(item)
+            #                break
+            #    else:
+            #        filtered_candidates.append(item)
 
     if perplexity_lm is not None and lang == "en":
         perplexity_filtered_candidates = []
