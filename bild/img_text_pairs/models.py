@@ -17,10 +17,8 @@ class Model:
         raise NotImplementedError()
 
 class OpenCLIPModel(Model):
-    def __init__(self, device, max_batch_size) -> None:
+    def __init__(self, device, max_batch_size, model_name='ViT-B-32-quickgelu', pretrained ='laion400m_e32') -> None:
         super().__init__()
-        model_name = 'ViT-B-32-quickgelu'
-        pretrained = 'laion400m_e32'
         self.model, _, self.preprocess = open_clip.create_model_and_transforms(model_name, pretrained=pretrained)
         self.device = device
         self.model.to(device)
@@ -81,9 +79,9 @@ class SentenceTransformerModel(Model):
     def encode_image(self, image):
         return self.image_model.encode([image], convert_to_tensor=True)
 
-def get_model(model_type, device='cuda', max_batch_size=1024):
+def get_model(model_type, model_name=None, pretrained=None, device='cuda', max_batch_size=1024):
     if model_type == 'open_clip':
-        return OpenCLIPModel(device, max_batch_size)
+        return OpenCLIPModel(model_name, pretrained, device, max_batch_size)
     elif model_type == 'sentence_transformers':
         return SentenceTransformerModel(device, max_batch_size)
     elif model_type == 'xlm_roberta_large_vit_l14':
