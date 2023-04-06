@@ -22,7 +22,9 @@ def run_pipeline(filename=None,
                  enable_wandb=True, 
                  log_frequency=10,
                  model_type='open_clip',
-                 device='cuda',
+                 model_name='ViT-B-32-quickgelu',
+                 pretrained='laion400m_e32',
+                 device=0,
                  max_batch_size=int(2e5),
                  debug=False,
                  wandb_log_frequency=1000,
@@ -70,7 +72,7 @@ def run_pipeline(filename=None,
         filenames = [os.path.join(output_dir, filename) for filename in os.listdir(output_dir) if "tar" in filename]
 
         # Create model
-        model = get_model(model_type, device, max_batch_size)
+        model = get_model(model_type, model_name, pretrained, device, max_batch_size)
 
         perplexity_lm = load_perplexity_language_model(perplexity_lm_name)
 
