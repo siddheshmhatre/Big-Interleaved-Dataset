@@ -1,6 +1,10 @@
 import torch
 import open_clip
+import transformers
+import clip
+
 from sentence_transformers import SentenceTransformer
+from multilingual_clip import pt_multilingual_clip
 
 class Model:
     def __init__(self) -> None:
@@ -42,6 +46,24 @@ class OpenCLIPModel(Model):
         image = self.preprocess(image).unsqueeze(0).to(self.device)
         return self.model.encode_image(image)
 
+class XLMRobertaLargeVITL14(Model):
+    def __init__(self, device) -> None:
+        super().__init__()
+        self.device = device
+        text_model_name = 'M-CLIP/XLM-Roberta-Large-Vit-L-14'
+        self.text_model = pt_multilingual_clip.MultilingualCLIP.from_pretrained(text_model_name).to(device)
+        self.tokenizer = transformers.AutoTokenizer.from_pretrained(text_model_name)
+
+        image_model_name = "ViT-L/14"
+        self.image_model, self.preprocess = clip.load(image_model_name, device=self.device)
+
+    def encode_text(self, candidates):
+        return self.text_model.forward(candidates, self.tokenizer, self.device)
+
+    def encode_image(self, image):
+        image = self.preprocess(image).unsqueeze(0).to(self.device)
+        return self.model.encode_image(image)
+
 class SentenceTransformerModel(Model):
     def __init__(self, device, max_batch_size) -> None:
         super().__init__()
@@ -64,5 +86,7 @@ def get_model(model_type, device='cuda', max_batch_size=1024):
         return OpenCLIPModel(device, max_batch_size)
     elif model_type == 'sentence_transformers':
         return SentenceTransformerModel(device, max_batch_size)
+    elif model_type == 'xlm_roberta_large_vit_l14':
+        return XLMRobertaLargeVITL14(device)
     else:
         raise ValueError("\'model_type\' should be either \'open_clip\' or \'sentence_transformers\'")
