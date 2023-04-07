@@ -4,3 +4,4 @@ wandb/*
 output/*
 __pycache__/*
 *.out
+.vscode/*
