@@ -88,6 +88,7 @@ class XLMRobertaLargeVITL14(Model):
 
     def encode_text(self, candidates):
         num_candidates = len(candidates)
+
         if num_candidates > self.max_batch_size:
             text_features = torch.zeros([num_candidates, self.embedding_dim]).to(
                 self.device
