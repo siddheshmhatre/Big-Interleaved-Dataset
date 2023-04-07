@@ -22,9 +22,10 @@ echo CONVERT=$CONVERT
 DOWNLOAD_IMGS="False"
 echo DOWNLOAD_IMGS=$DOWNLOAD_IMGS
 
-MODEL_TYPE="open_clip"
+MODEL_TYPE="xlm_roberta_large_vit_l14"
 echo MODEL_TYPE=$MODEL_TYPE
 
+# If MODEL_TYPE is xlm_roberta_large_vit_l14, then MODEL_NAME and PRETRAINEd wont be used
 MODEL_NAME='xlm-roberta-large-ViT-H-14'
 echo MODEL_NAME=$MODEL_NAME
 
@@ -50,7 +51,7 @@ DEVICE=0
 echo DEVICE=$DEVICE
 # ARGS
 
-source /admin/home-siddhesh1793/.env/bin/activate
+#source /admin/home-siddhesh1793/.env/bin/activate
 echo python3 version = `python3 --version`
 python -c "import torch; print (torch.__version__)"
 

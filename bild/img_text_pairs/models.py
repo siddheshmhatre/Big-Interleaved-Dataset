@@ -24,13 +24,19 @@ class OpenCLIPModel(Model):
         self.model.to(device)
         self.tokenizer = open_clip.get_tokenizer(model_name)
         self.max_batch_size = max_batch_size
+        self.embedding_dim_dict = {'ViT-B-32-quickgelu' : 512, 
+                                   'xlm-roberta-large-ViT-H-14' : 1024}
+        self.embedding_dim = self.embedding_dim_dict.get(model_name, None)
+
+        if self.embedding_dim is None:
+            raise ValueError(f"\'model_name\' should be either \'ViT-B-32-quickgelu\' or \'xlm-roberta-large-ViT-H-14\'")
 
     def encode_text(self, candidates):
         tokenized_text = self.tokenizer(candidates).to(self.device)
 
         if tokenized_text.shape[0] > self.max_batch_size:
             num_candidates = tokenized_text.shape[0]
-            text_features = torch.zeros([num_candidates, 512]).to(self.device)
+            text_features = torch.zeros([num_candidates, self.embedding_dim]).to(self.device)
             for i in range(0, num_candidates, self.max_batch_size):
                 tokenized_text_sub = tokenized_text[i:i + self.max_batch_size]
                 text_features[i:i + self.max_batch_size] = self.model.encode_text(tokenized_text_sub)
@@ -87,4 +93,4 @@ def get_model(model_type, model_name=None, pretrained=None, device='cuda', max_b
     elif model_type == 'xlm_roberta_large_vit_l14':
         return XLMRobertaLargeVITL14(device)
     else:
-        raise ValueError("\'model_type\' should be either \'open_clip\' or \'sentence_transformers\'")
+        raise ValueError("\'model_type\' should be either \'open_clip\' or \'sentence_transformers\' or \'xlm_roberta_large_vit_l14\'")
