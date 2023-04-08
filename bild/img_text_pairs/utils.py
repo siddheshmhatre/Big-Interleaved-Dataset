@@ -24,7 +24,7 @@ if nltk_download:
 
 path_to_perplexity_models = {
     'oscar' : "/admin/home-siddhesh1793/data/big_sci_lm/oscar",
-    'laion2B-en' : "/home/siddhesh1793/code/data_tooling/kenlm_training/data/laion/laion2B-en/lm_sp"
+    'laion2B-en' : "/admin/home-siddhesh1793/data_tooling/kenlm_training/data/laion/laion2B-en/lm_sp"
 }
 
 def get_stats_table(raw_counts : dict, stats_table_cols : list):

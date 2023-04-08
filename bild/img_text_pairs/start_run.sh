@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --partition=g80n60
+#SBATCH --partition=g40
 #SBATCH --nodes 1
 #SBATCH --gpus 8
 #SBATCH --comment laion
@@ -19,13 +19,16 @@ echo hostname=`hostname`
 CONVERT="False"
 echo CONVERT=$CONVERT
 
+CONVERTED_FILENAME="/admin/home-siddhesh1793/data/00000_url_to_text.parquet"
+echo CONVERTED_FILENAME=$CONVERTED_FILENAME
+
 DOWNLOAD_IMGS="False"
 echo DOWNLOAD_IMGS=$DOWNLOAD_IMGS
 
 MODEL_TYPE="xlm_roberta_large_vit_l14"
 echo MODEL_TYPE=$MODEL_TYPE
 
-# If MODEL_TYPE is xlm_roberta_large_vit_l14, then MODEL_NAME and PRETRAINEd wont be used
+# If MODEL_TYPE is xlm_roberta_large_vit_l14, then MODEL_NAME and PRETRAINED wont be used
 MODEL_NAME='xlm-roberta-large-ViT-H-14'
 echo MODEL_NAME=$MODEL_NAME
 
@@ -38,7 +41,7 @@ echo MATCHING_THRESHOLD=$MATCHING_THRESHOLD
 ENABLE_WANDB="True"
 echo ENABLE_WANDB=$ENABLE_WANDB
 
-MAX_BATCH_SIZE=256
+MAX_BATCH_SIZE=512
 echo MAX_BATCH_SIZE=$MAX_BATCH_SIZE
 
 FILTER_BY_LANG="False"
@@ -51,7 +54,7 @@ DEVICE='cuda'
 echo DEVICE=$DEVICE
 # ARGS
 
-#source /admin/home-siddhesh1793/.env/bin/activate
+source /admin/home-siddhesh1793/.env/bin/activate
 echo python3 version = `python3 --version`
 python -c "import torch; print (torch.__version__)"
 
@@ -65,4 +68,5 @@ python run.py --convert $CONVERT \
 				--max_batch_size $MAX_BATCH_SIZE \
 				--filter_by_lang $FILTER_BY_LANG \
 				--log_frequency $LOG_FREQUENCY \
-				--device $DEVICE
+				--device $DEVICE \
+				--converted_filename $CONVERTED_FILENAME
